@@ -47,7 +47,22 @@ mem_init()
 void *
 mem_alloc(unsigned long size)
 {
-  /*  ecrire votre code ici */
+  /* 1er cas : On a un bloc de taille size qui est libre */
+  if(TZL[size] != NULL){
+    ZL *courant = TZL[size]; 
+    TZL[size] = courant->suivant;
+    return courant;
+  } else {			/* 2eme cas : On a pas de bloc de taille size qui est libre */
+    unsigned long indice = size; 
+    while(TZL[indice] == NULL){
+      if(indice == BUDDY_MAX_INDEX){
+	printf("Impossible");
+      }else{
+	
+      }
+    }
+  }
+  
   return 0;  
 }
 
@@ -55,6 +70,7 @@ int
 mem_free(void *ptr, unsigned long size)
 {
   /* ecrire votre code ici */
+
   return 0;
 }
 
