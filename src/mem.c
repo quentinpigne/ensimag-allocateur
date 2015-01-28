@@ -11,9 +11,12 @@
 
 /** squelette du TP allocateur memoire */
 
+typedef struct ZL {
+	int taille;
+	struct ZL* suivant; 
+} ZL;
+ZL* TZL[BUDDY_MAX_INDEX+1];
 void *zone_memoire = 0;
-
-/* ecrire votre code ici */
 
 int 
 mem_init()
@@ -26,8 +29,18 @@ mem_init()
       return -1;
     }
 
-  /* ecrire votre code ici */
+  // Etat initial, il n'y a qu'un bloc de taille maximale
+  // Création de la zone mémoire principale
+  ZL* zone_init = zone_memoire;
+  zone_init->taille = ALLOC_MEM_SIZE;
+  zone_init->suivant = NULL;
 
+  TZL[BUDDY_MAX_INDEX] = zone_init;
+
+  for(int i = 0; i < BUDDY_MAX_INDEX; i++){
+	  TZL[i] = NULL;
+  }
+  
   return 0;
 }
 

@@ -44,9 +44,9 @@ configure_file (
 # sur centOS6, c'est une bibliothèque avec son équivalent de pkg-config
 # sinon, on utilise l'autodetection de Cmake
 ###
-if(EXISTS /usr/src/gtest)
-    add_subdirectory(/usr/src/gtest ./gtest)
-else(EXISTS /usr/src/gtest)
+if(EXISTS /opt/gtest-1.7.0)
+    add_subdirectory(/opt/gtest-1.7.0 ./gtest)
+else(EXISTS /opt/gtest-1.7.0)
   if(EXISTS /usr/bin/gtest-config)
     execute_process(COMMAND gtest-config --cppflags --cxxflags OUTPUT_VARIABLE CENTOS_GTEST_CFLAGS)
     execute_process(COMMAND gtest-config --ldflags --libs OUTPUT_VARIABLE CENTOS_GTEST_LDFLAGS)
@@ -58,7 +58,7 @@ else(EXISTS /usr/src/gtest)
     find_package(GTest REQUIRED)
     include_directories(${GTEST_INCLUDE_DIRS})
   endif(EXISTS /usr/bin/gtest-config)
-endif(EXISTS /usr/src/gtest)
+endif(EXISTS /opt/gtest-1.7.0)
 
 ##
 # Si vous utilisé plusieurs fichiers, en plus de mem.c, pour votre
