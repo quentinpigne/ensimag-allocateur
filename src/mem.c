@@ -7,16 +7,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <math.h>
 #include "mem.h"
 
-/** squelette du TP allocateur memoire */
+/**
+    Structures de données
+**/
 
 typedef struct ZL {
-	int taille;
-	struct ZL* suivant; 
+    struct ZL* suivant; 
 } ZL;
-ZL* TZL[BUDDY_MAX_INDEX+1];
-void *zone_memoire = 0;
+
+ZL* TZL[BUDDY_MAX_INDEX + 1];
+
+void* zone_memoire = 0;
+
+/**
+    Fonctions de l'allocateur mémoire
+**/
 
 int 
 mem_init()
@@ -32,7 +40,6 @@ mem_init()
   // Etat initial, il n'y a qu'un bloc de taille maximale
   // Création de la zone mémoire principale
   ZL* zone_init = zone_memoire;
-  zone_init->taille = ALLOC_MEM_SIZE;
   zone_init->suivant = NULL;
 
   TZL[BUDDY_MAX_INDEX] = zone_init;
@@ -47,23 +54,17 @@ mem_init()
 void *
 mem_alloc(unsigned long size)
 {
-  /* 1er cas : On a un bloc de taille size qui est libre */
-  if(TZL[size] != NULL){
-    ZL *courant = TZL[size]; 
-    TZL[size] = courant->suivant;
-    return courant;
-  } else {			/* 2eme cas : On a pas de bloc de taille size qui est libre */
-    unsigned long indice = size; 
-    while(TZL[indice] == NULL){
-      if(indice == BUDDY_MAX_INDEX){
-	printf("Impossible");
-      }else{
-	
-      }
+    int indice = ceil(log(size)/log(2));
+    if(TZL[indice] == NULL) {
+		unsigned long taille_sup = pow(2, indice + 1);
+		ZL* zl_taille_sup = mem_alloc(taille_sup);
+		TZL[indice] = zl_taille_sup;
+		TZL[indice]->suivant = zl_taille_sup + taille_sup/2;
     }
-  }
-  
-  return 0;  
+		ZL* courant = TZL[indice];
+		TZL[indice] = courant->suivant;
+		return courant;
+	return (void*)0;
 }
 
 int 
